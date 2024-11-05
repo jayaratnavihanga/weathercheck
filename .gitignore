@@ -27,3 +27,6 @@ dist-ssr
 
 src/firebase/firebase.js
 
+.env
+
+

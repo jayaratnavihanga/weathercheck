@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { useRoutes } from 'react-router-dom';
-import Login from "./components/auth/login";
-import Register from "./components/auth/register";
-import Header from "./components/header";
-import Home from "./components/home";
-import { AuthProvider } from "./contexts/authContext";
+import Login from "./components/auth/login/index.jsx";
+import Register from "./components/auth/register/index.jsx";
+import Header from "./components/header/index.jsx";
+import Home from "./components/home/index.jsx";
+import { AuthProvider } from "./contexts/authContext/index.jsx";
 
-import './App.css';
 
 function App() {
-
     const routesArray = [
         { path: "*", element: <Login /> },
         { path: "/login", element: <Login /> },
@@ -20,9 +18,12 @@ function App() {
 
     return (
         <AuthProvider>
-            <Header />
-            {routesElement}
-
+            <div className="app-container">
+                <Header />
+                <main className="content">
+                    {routesElement}
+                </main>
+            </div>
         </AuthProvider>
     );
 }

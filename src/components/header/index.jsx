@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../contexts/authContext'
-import { doSignOut } from '../../firebase/auth'
+import { useAuth } from '../../contexts/authContext/index.jsx'
+import { doSignOut } from '../../firebase/auth.js'
 
 const Header = () => {
     const navigate = useNavigate()
