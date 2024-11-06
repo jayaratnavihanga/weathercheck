@@ -19,7 +19,9 @@ function App() {
     return (
         <AuthProvider>
             <div className="app-container">
+{/*
                 <Header />
+*/}
                 <main className="content">
                     {routesElement}
                 </main>
