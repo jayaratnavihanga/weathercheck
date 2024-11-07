@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import Login from "./components/auth/login/index.jsx";
 import Register from "./components/auth/register/index.jsx";
 import Header from "./components/header/index.jsx";
 import Home from "./components/home/index.jsx";
 import { AuthProvider } from "./contexts/authContext/index.jsx";
-
 
 function App() {
     const routesArray = [
@@ -18,11 +17,10 @@ function App() {
 
     return (
         <AuthProvider>
-            <div className="app-container">
-{/*
+            <div className="flex flex-col min-h-screen">
                 <Header />
-*/}
-                <main className="content">
+
+                <main className="flex-grow pt-16">
                     {routesElement}
                 </main>
             </div>
