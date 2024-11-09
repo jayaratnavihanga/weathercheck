@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const WINDY_API_KEY = import.meta.env.VITE_WINDY_API_KEY;
 
@@ -36,7 +37,12 @@ const WindyMap = ({ lat, lon }) => {
         };
     }, [lat, lon]);
 
-    return <div id="windy" style={{ width: '100%', height: '300px' }}></div>;
+    return <div id="windy" className="w-full h-[300px] rounded-xl"></div>;
+};
+
+WindyMap.propTypes = {
+    lat: PropTypes.number.isRequired,
+    lon: PropTypes.number.isRequired,
 };
 
 export default WindyMap;

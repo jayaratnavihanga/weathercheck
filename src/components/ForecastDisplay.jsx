@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { getWeatherIcon } from './utils/getWeatherAssets.js';
 
 const ForecastDisplay = ({ forecast, handleItemClick }) => (
-    <div className="flex justify-center mt-2 mb-6 overflow-x-auto">
+    <div className="flex justify-center mt-2 mb-6 overflow-x-auto font-sourGummy">
         <div className="flex space-x-4 ">
             {forecast.map((item, index) => (
                 <button
