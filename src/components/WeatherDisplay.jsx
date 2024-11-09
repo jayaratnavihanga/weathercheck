@@ -1,65 +1,64 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getWeatherIcon } from './utils/getWeatherAssets'; // Adjust path if necessary
 
 const WeatherDisplay = ({ weather = {} }) => {
     if (!weather.weather || !weather.weather[0]) {
         return null;
     }
 
-    const formatDateTime = (timestamp) => {
-        const date = new Date(timestamp * 1000);
-        const day = date.toLocaleDateString(undefined, { weekday: 'long' });
-        const time = date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-        return `${day}, ${time}`;
-    };
+    const timezoneOffset = weather.timezone || 0;
+    const localTime = new Date(Date.now() + timezoneOffset * 1000 - new Date().getTimezoneOffset() * 60000);
+    const formattedTime = localTime.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const weatherIcon = getWeatherIcon(weather.weather[0].main); // Fetch the icon based on the weather type
 
     return (
-        <div className="pt-10">
-            <div
-                className="
-                h-fit w-fit bg-gray-400 rounded-md bg-clip-padding
-                backdrop-filter backdrop-blur-sm bg-opacity-60 border
-                border-gray-100
-            "
-            >
-                <img
-                    className="h-40 w-fit"
-                    src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-                    alt={weather.weather[0].description}
-                />
+        <div className="bg-yellow-400 text-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
+            <div className="flex items-center justify-between">
+                <div>
+                    <p className="text-sm">Current weather</p>
+                    <p className="text-xs">{formattedTime}</p>
+                </div>
             </div>
 
-            <p className="text-6xl pt-10">{Math.round(weather.main.temp)}°C</p>
-
-            {weather.dt && (
-                <p className="text-lg pt-2">{formatDateTime(weather.dt)}</p>
-            )}
-
-            <p>{weather.weather[0].main}</p>
-            <p>{weather.weather[0].description}</p>
-            <div className="font-bold flex flex-row gap-4 mt-5">
-                <div className="bg-white shadow-md rounded-lg p-4 text-center">
-                    <p className="text-lg">Humidity</p>
-                    <p>{weather.main.humidity}%</p>
+            <div className="flex items-center justify-center mt-4">
+                <img
+                    src={weatherIcon}
+                    alt={weather.weather[0].description}
+                    className="w-16 h-16"
+                />
+                <div className="ml-4">
+                    <p className="text-5xl font-bold">{Math.round(weather.main.temp)}°C</p>
+                    <p className="text-lg">{weather.weather[0].main}</p>
                 </div>
-                <div className="bg-white shadow-md rounded-lg p-4 text-center">
-                    <p className="text-lg">Visibility</p>
-                    <p>{(weather.visibility / 1000).toFixed(1)} km</p>
-                </div>
-                <div className="bg-white shadow-md rounded-lg p-4 text-center">
-                    <p className="text-lg">Wind Speed</p>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 mt-6 text-sm">
+                <div>
+                    <p>Wind</p>
                     <p>{weather.wind.speed} m/s</p>
                 </div>
-                <div className="bg-white shadow-md rounded-lg p-4 text-center">
-                    <p className="text-lg">Wind Direction</p>
-                    <p>{weather.wind.deg}°</p>
+                <div>
+                    <p>Humidity</p>
+                    <p>{weather.main.humidity}%</p>
                 </div>
-                <div className="bg-white shadow-md rounded-lg p-4 text-center">
-                    <p className="text-lg">Cloud Coverage</p>
+                <div>
+                    <p>Feels like</p>
+                    <p>{Math.round(weather.main.feels_like)}°C</p>
+                </div>
+                <div>
+                    <p>Visibility</p>
+                    <p>{(weather.visibility / 1000).toFixed(1)} km</p>
+                </div>
+                <div>
+                    <p>Pressure</p>
+                    <p>{weather.main.pressure} hPa</p>
+                </div>
+                <div>
+                    <p>Cloud Coverage</p>
                     <p>{weather.clouds.all}%</p>
                 </div>
             </div>
-
         </div>
     );
 };
@@ -77,16 +76,16 @@ WeatherDisplay.propTypes = {
             temp: PropTypes.number,
             humidity: PropTypes.number,
             feels_like: PropTypes.number,
+            pressure: PropTypes.number,
         }),
         wind: PropTypes.shape({
             speed: PropTypes.number,
-            deg: PropTypes.number,
         }),
         clouds: PropTypes.shape({
             all: PropTypes.number,
         }),
         visibility: PropTypes.number,
-        dt: PropTypes.number,
+        timezone: PropTypes.number,
     }),
 };
 

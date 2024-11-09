@@ -17,10 +17,9 @@ function App() {
 
     return (
         <AuthProvider>
-            <div className="flex flex-col min-h-screen">
+            <div className="flex flex-col h-screen overflow-hidden">
                 <Header />
-
-                <main className="flex-grow pt-16">
+                <main className="flex-grow overflow-hidden">
                     {routesElement}
                 </main>
             </div>

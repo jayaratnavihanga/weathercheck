@@ -2,14 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ForecastDetailModal = ({ selectedItem, closeModal }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="bg-gray-600 p-5 rounded-lg opacity-95">
-            <h1 className="text-xl font-bold">{selectedItem.weather[0].main} Details</h1>
-            <p>Date: {new Date(selectedItem.dt * 1000).toLocaleString()}</p>
-            <p>Temperature: {selectedItem.main.temp}°C</p>
-            <p>Feels Like: {selectedItem.main.feels_like}°C</p>
-            <p>Humidity: {selectedItem.main.humidity}%</p>
-            <button onClick={closeModal} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded shadow">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+        <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+            <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none"
+                aria-label="Close"
+            >
+                ✕
+            </button>
+
+            <h1 className="text-2xl font-bold text-gray-800 mb-3">{selectedItem.weather[0].main} Details</h1>
+            <p className="text-gray-600">
+                <span className="font-semibold">Date:</span> {new Date(selectedItem.dt * 1000).toLocaleString()}
+            </p>
+            <p className="text-gray-600 mt-2">
+                <span className="font-semibold">Temperature:</span> {selectedItem.main.temp}°C
+            </p>
+            <p className="text-gray-600 mt-2">
+                <span className="font-semibold">Feels Like:</span> {selectedItem.main.feels_like}°C
+            </p>
+            <p className="text-gray-600 mt-2">
+                <span className="font-semibold">Humidity:</span> {selectedItem.main.humidity}%
+            </p>
+
+            <button
+                onClick={closeModal}
+                className="mt-6 w-full py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-200"
+            >
                 Close
             </button>
         </div>
