@@ -5,8 +5,9 @@ import WeatherDisplay from '../WeatherDisplay';
 import ForecastDisplay from '../ForecastDisplay';
 import ForecastDetailModal from '../ForecastDetailModal';
 import ErrorMessage from '../ErrorMessage';
-import { getBackgroundImage, getWeatherIcon } from '../utils/getWeatherAssets';
+import { getBackgroundImage } from '../utils/getWeatherAssets';
 import { countryCodes } from '../utils/countryCodes';
+import WindyMap from "../WindyMap.jsx";
 
 const WEATHER_API_BASE = "https://api.openweathermap.org/data/2.5/";
 const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
@@ -18,6 +19,7 @@ const Home = () => {
     const [forecast, setForecast] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [error, setError] = useState("");
+    const [coordinates, setCoordinates] = useState({ lat: 50.4, lon: 14.3 }); // Default coordinates
 
     const fetchWeather = (url) => {
         fetch(url)
@@ -27,6 +29,7 @@ const Home = () => {
                     setError(result.message);
                 } else {
                     setWeather(result);
+                    setCoordinates({ lat: result.coord.lat, lon: result.coord.lon }); // Update map coordinates
                     setError("");
                 }
             })
@@ -81,28 +84,36 @@ const Home = () => {
         const forecastUrl = `${WEATHER_API_BASE}forecast?q=${search}&units=metric&APPID=${WEATHER_API_KEY}`;
         fetchWeather(weatherUrl);
         fetchForecast(forecastUrl);
+/*
+        setSearch("");
+*/
     };
 
     const handleItemClick = (item) => setSelectedItem(item);
     const closeModal = () => setSelectedItem(null);
 
+/*
     const backgroundImage = weather.weather ? getBackgroundImage(weather.weather[0].main) : getBackgroundImage("Clear");
+*/
+/*
     const isNight = weather.sys && (Date.now() / 1000 > weather.sys.sunset || Date.now() / 1000 < weather.sys.sunrise);
+*/
 
     const countryName = weather.sys && weather.sys.country ? countryCodes[weather.sys.country] : weather.sys?.country || "Unknown Country";
 
     return (
         <div
-            className={`relative bg-white bg-cover bg-center h-full pt-8 ${isNight ? "text-white" : "text-black"}`}
+            className="elative bg-white bg-cover bg-center h-full pt-8 text-black" /*${isNight ? "text-white" : "text-black"*/
 /*
             style={{ backgroundImage: `url(${backgroundImage})` }}
 */
         >
+{/*
             {isNight && <div className="absolute inset-0 bg-black opacity-80"></div>}
+*/}
 
             <div className="relative z-10 p-5 overflow-y-auto h-full flex flex-col md:flex-row">
                 <div className="basis-1/2">
-                    <ErrorMessage error={error} />
 
                     <div className="flex flex-col items-start h-full">
                         {weather.name && weather.sys && weather.main && weather.weather && weather.weather[0] && (
@@ -111,21 +122,26 @@ const Home = () => {
                                 <p className="text-4xl">{countryName}</p>
 
                                 <div className="my-4">
-                                    <WeatherDisplay weather={weather}/>
+                                    <WeatherDisplay weather={weather} />
                                 </div>
                                 <p className="text-xl">5 Day Forecast</p>
 
-
                                 <div className="mt-4 w-full max-h-[300px] overflow-y-auto">
-                                    <ForecastDisplay forecast={forecast} handleItemClick={handleItemClick}/>
+                                    <ForecastDisplay forecast={forecast} handleItemClick={handleItemClick} />
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
+                <div className="basis-1/2">
+                    <div className="p-5 flex justify-end items-start">
+                        <SearchBar search={search} setSearch={setSearch} searchPressed={searchPressed} />
+                    </div>
+                    <div>
+                        <WindyMap lat={coordinates.lat} lon={coordinates.lon} />
+                    </div>
+                    <ErrorMessage error={error} />
 
-                <div className="basis-1/2 p-5 flex justify-end items-start">
-                    <SearchBar search={search} setSearch={setSearch} searchPressed={searchPressed} />
                 </div>
             </div>
 
