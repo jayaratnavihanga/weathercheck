@@ -1,32 +1,32 @@
 import React, {useState, useEffect} from 'react';
 import {useAuth} from '../../contexts/authContext/index.jsx';
-/*import rainVideo from "../../assets/cloud.mp4";
-import rainImage from "../../assets/rain.jpg";*/
-import clear from "../../assets/clear.jpg";
-import clouds from "../../assets/clouds.jpg";
-import drizzle from "../../assets/drizzle.jpg";
-import hail from "../../assets/hail.jpg";
-import mist from "../../assets/mist.jpg";
+import SearchBar from '../SearchBar';
+import WeatherDisplay from '../WeatherDisplay';
+import ForecastDisplay from '../ForecastDisplay';
+import ForecastDetailModal from '../ForecastDetailModal';
+import ErrorMessage from '../ErrorMessage';
+import bg from '../../assets/bg.jpg'
+/*
+import {getBackgroundImage} from '../utils/getWeatherAssets';
+*/
+import {countryCodes} from '../../utils/countryCodes';
+import WindyMap from "../WindyMap.jsx";
+import ForecastGraph from "../ForecastGraph.jsx";
+import {FaMapMarkerAlt} from "react-icons/fa";
 
-import rain from "../../assets/rain.jpg";
-import snow from "../../assets/snow.jpg";
-import thunderstorm from "../../assets/thunderstorm.jpg";
-
-
-const api = {
-    key: import.meta.env.VITE_WEATHER_API_KEY,
-    base: "https://api.openweathermap.org/data/2.5/",
-};
+const WEATHER_API_BASE = "https://api.openweathermap.org/data/2.5/";
+const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 const Home = () => {
-    const {currentUser} = useAuth();
+    /*
+        const {currentUser} = useAuth();
+    */
     const [search, setSearch] = useState("");
     const [weather, setWeather] = useState({});
     const [forecast, setForecast] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null); // State to track the selected forecast item
-
+    const [selectedItem, setSelectedItem] = useState(null);
     const [error, setError] = useState("");
-
+    const [coordinates, setCoordinates] = useState({lat: 50.4, lon: 14.3});
 
     const fetchWeather = (url) => {
         fetch(url)
@@ -36,6 +36,7 @@ const Home = () => {
                     setError(result.message);
                 } else {
                     setWeather(result);
+                    setCoordinates({lat: result.coord.lat, lon: result.coord.lon});
                     setError("");
                 }
             })
@@ -43,28 +44,7 @@ const Home = () => {
                 setError("An error occurred while fetching the weather data.");
             });
     };
-    const getBackgroundImage = (weatherType) => {
-        switch (weatherType) {
-            case 'Clear':
-                return clear;
-            case 'Clouds':
-                return clouds;
-            case 'Drizzle':
-                return drizzle;
-            case 'Hail':
-                return hail;
-            case 'Mist':
-                return mist;
-            case 'Rain':
-                return rain;
-            case 'Snow':
-                return snow;
-            case 'Thunderstorm':
-                return thunderstorm;
-            default:
-                return clear; // Default background if no match is found
-        }
-    };
+
     const fetchForecast = (url) => {
         fetch(url)
             .then((res) => res.json())
@@ -87,8 +67,8 @@ const Home = () => {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const {latitude, longitude} = position.coords;
-                    const weatherUrl = `${api.base}weather?lat=${latitude}&lon=${longitude}&units=metric&APPID=${api.key}`;
-                    const forecastUrl = `${api.base}forecast?lat=${latitude}&lon=${longitude}&units=metric&APPID=${api.key}`;
+                    const weatherUrl = `${WEATHER_API_BASE}weather?lat=${latitude}&lon=${longitude}&units=metric&APPID=${WEATHER_API_KEY}`;
+                    const forecastUrl = `${WEATHER_API_BASE}forecast?lat=${latitude}&lon=${longitude}&units=metric&APPID=${WEATHER_API_KEY}`;
                     fetchWeather(weatherUrl);
                     fetchForecast(forecastUrl);
                 },
@@ -107,167 +87,88 @@ const Home = () => {
             return;
         }
 
-        const weatherUrl = `${api.base}weather?q=${search}&units=metric&APPID=${api.key}`;
-        const forecastUrl = `${api.base}forecast?q=${search}&units=metric&APPID=${api.key}`;
+        const weatherUrl = `${WEATHER_API_BASE}weather?q=${search}&units=metric&APPID=${WEATHER_API_KEY}`;
+        const forecastUrl = `${WEATHER_API_BASE}forecast?q=${search}&units=metric&APPID=${WEATHER_API_KEY}`;
         fetchWeather(weatherUrl);
         fetchForecast(forecastUrl);
+        /*
+                setSearch("");
+        */
     };
-    const handleItemClick = (item) => {
-        setSelectedItem(item); // Set the selected item to display more details
-    };
+
+    const handleItemClick = (item) => setSelectedItem(item);
+    const closeModal = () => setSelectedItem(null);
+
     /*
-
-        const getBackgroundImage = (weatherType) => {
-            switch (weatherType) {
-                case 'Clear':
-                    return clear;
-                case 'Clouds':
-                    return clouds;
-                case 'Drizzle':
-                    return drizzle;
-                case 'Hail':
-                    return hail;
-                case 'Mist':
-                    return mist;
-                case 'Rain':
-                    return rain;
-                case 'Snow':
-                    return snow;
-                case 'Thunderstorm':
-                    return thunderstorm;
-                default:
-                    return clear; // Default background if no match is found
-            }
-        };
-
-        const backgroundImage = getBackgroundImage(weather.weather[0].main);
-
-
-
+        const backgroundImage = weather.weather ? getBackgroundImage(weather.weather[0].main) : getBackgroundImage("Clear");
+    */
+    /*
+        const isNight = weather.sys && (Date.now() / 1000 > weather.sys.sunset || Date.now() / 1000 < weather.sys.sunrise);
     */
 
+    const countryName = weather.sys && weather.sys.country ? countryCodes[weather.sys.country] : weather.sys?.country || "Unknown Country";
+
     return (
-        <div className="">
-            <p className="">
-            </p>
-            <div>
-
-                {/*
-                style={{backgroundImage: `url(${rainBg})`}}
+        <div
+            className=" bg-cover bg-center h-screen "
+            style={{backgroundImage: `url(${bg})`}}
+        >
+            {/*
+            <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-3xl"></div>
 */}
-                {/* <video
-                    className="absolute top-0 left-0 w-full h-full object-cover -z-10"
-                    src={rainVideo}
-                    autoPlay
-                    loop
-                    muted
-                                        onLoadedMetadata={(e) => e.target.playbackRate = 0.25}
-                />*/}
+
+            {/*
+            <div
+                className=${isNight ? "text-white" : "text-black"}
+                            style={{ backgroundImage: `url(${backgroundImage})` }}
+            >
+            {isNight && <div className="absolute inset-0 bg-black opacity-80"></div>}
+            */}
+            <div className="pt-16 ">
+
+                {weather.name && weather.sys && weather.main && weather.weather && weather.weather[0] && (
+                    <div>
+                        <div className="flex justify-between items-center p-4">
+                            <div className="pl-16">
+                                <SearchBar search={search} setSearch={setSearch} searchPressed={searchPressed}/>
+                                <ErrorMessage error={error}/>
 
 
-                <div className="">
+                            </div>
+                            <p className="text-6xl pr-10 flex items-center space-x-2">
+                                <FaMapMarkerAlt className="pt-2 text-4xl text-red-500"/>
+                                <div className="text-white">                         <span>
+        {weather.name}, <span>{countryName}</span>
+    </span></div>
+                            </p>
 
-                    {/*
-                    <h2 className="">Today's Weather</h2>
-*/}
-                    {error && <p className="">{error}</p>}
-
-                    <div className="flex flex-col md:flex-row">
-                        <div className="flex-1">
-                            {weather.name && weather.sys && (
-                                <>
-                                    <p className="text-6xl">{weather.name}, {weather.sys.country}</p>
-                                    <p className="text-6xl">{weather.main.temp}°C</p>
-                                </>
-                            )}
                         </div>
-                        <div className="flex-1 flex justify-center items-center">
-                            <input
-                                className="input input-bordered input-primary w-full max-w-xs"
-                                type="text"
-                                placeholder="Enter city/town..."
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                            <button
-                                className="btn btn-outline btn-info ml-2"
-                                onClick={searchPressed}
-                            >
-                                Search
-                            </button>
+
+                    </div>
+                )}
+
+                <div className="grid grid-cols-2 ">
+                    <div className="flex flex-col space-y-4 ml-14 ">
+                        <WeatherDisplay weather={weather}/>
+                        <ForecastDisplay forecast={forecast} handleItemClick={handleItemClick}/>
+
+                    </div>
+                    <div className="flex flex-col pt-3 ">
+                        <div className="pt-4">
+                            <WindyMap lat={coordinates.lat} lon={coordinates.lon}/>
+
+                            <ForecastGraph forecast={forecast}/>
+
                         </div>
                     </div>
-
-                    <div className="">{/*
-                    {weather.name && weather.sys && (
-                        <>
-                            <p className="text-6xl">{weather.name}, {weather.sys.country}</p>
-                            <p className="text-6xl">{weather.main.temp}°C</p>
-                        </>
-                    )}*/}
-                        {forecast.length > 0 ? (
-                            <div className="flex justify-center mt-6 mb-6 overflow-x-auto">
-                                <div className="flex space-x-4 px-4">
-                                    {forecast.map((item, index) => (
-                                        <button key={index} onClick={() => handleItemClick(item)}
-                                                className="text-center bg-white rounded-lg shadow-lg p-4 focus:outline-none">
-                                            <p className="font-semibold">{new Date(item.dt * 1000).toLocaleDateString()}</p>
-                                            <img
-                                                src={`https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`}
-                                                alt={item.weather[0].description}
-                                                className="mx-auto w-20 h-20"
-                                            />
-                                            <p className="text-xl font-bold">{item.main.temp}°C</p>
-                                            <p className="text-sm text-gray-700">{item.weather[0].main}</p>
-                                            <p className="text-sm text-gray-500">{item.weather[0].description}</p>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : (
-                            <p>No forecast data available.</p>
-                        )}
-
-                        {selectedItem && (
-                            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                                <div className="bg-white p-5 rounded-lg">
-                                    <h1 className="text-xl font-bold">{selectedItem.weather[0].main} Details</h1>
-                                    <p>Date: {new Date(selectedItem.dt * 1000).toLocaleString()}</p>
-                                    <p>Temperature: {selectedItem.main.temp}°C</p>
-                                    <p>Feels Like: {selectedItem.main.feels_like}°C</p>
-                                    <p>Humidity: {selectedItem.main.humidity}%</p>
-                                    <button onClick={() => setSelectedItem(null)}
-                                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded shadow">
-                                        Close
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {typeof weather.main !== "undefined" && weather.weather && (
-                        <div className="pt-10">
-                            <img
-                                src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-                                alt={weather.weather[0].description}
-                                className=""
-                            />
-                            <p className="">{weather.weather[0].main}</p>
-                            <p className="">{weather.weather[0].description}</p>
-                            <div className="">
-                                <p><strong>Humidity:</strong> {weather.main.humidity}%</p>
-                                <p><strong>Visibility:</strong> {weather.visibility / 1000} km</p>
-                                <p><strong>Wind Speed:</strong> {weather.wind.speed} m/s</p>
-                                <p><strong>Wind Direction:</strong> {weather.wind.deg}°</p>
-                                <p><strong>Cloud Coverage:</strong> {weather.clouds.all}%</p>
-                            </div>
-                        </div>
-                    )}
                 </div>
 
 
             </div>
+            {selectedItem && <ForecastDetailModal selectedItem={selectedItem} closeModal={closeModal}/>}
         </div>
     );
+
 };
 
 export default Home;
