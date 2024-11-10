@@ -37,7 +37,7 @@ const WindyMap = ({ lat, lon }) => {
         };
     }, [lat, lon]);
 
-    return <div id="windy" className="w-[640px] h-[250px]  rounded-xl ml-16 "></div>;
+    return <div id="windy" className="lg:w-[640px] h-[250px]  lg:rounded-xl lg:ml-16 "></div>;
 };
 
 WindyMap.propTypes = {

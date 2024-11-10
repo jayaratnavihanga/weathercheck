@@ -17,9 +17,9 @@ function App() {
 
     return (
         <AuthProvider>
-            <div className="flex flex-col h-screen overflow-hidden font-lato ">
+            <div className="flex flex-col h-screen lg:overflow-hidden font-lato ">
                 <Header />
-                <main className="flex-grow overflow-hidden">
+                <main className="flex-grow lg:overflow-hidden">
                     {routesElement}
                 </main>
             </div>

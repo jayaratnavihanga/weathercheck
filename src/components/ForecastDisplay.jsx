@@ -5,7 +5,7 @@ import { getWeatherIcon } from '../utils/getWeatherAssets.js';
 const ForecastDisplay = ({ forecast, handleItemClick }) => (
     <div className="text-white">
         <p className="text-center text-lg font-bold pb-4">5 Day Forecast</p>
-        <div className="flex justify-center mt-2 mb-6 overflow-x-auto font-sourGummy">
+        <div className="lg:flex justify-center mt-2 mb-6 overflow-x-auto ">
             <div className="flex space-x-10">
                 {forecast.map((item, index) => (
                     <button

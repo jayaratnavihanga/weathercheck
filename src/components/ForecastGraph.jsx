@@ -74,13 +74,10 @@ const ForecastGraph = ({ forecast }) => {
 
     return (
         <div
-            className="my-4 shadow-lg bg-white rounded-lg p-5 w-[600px] h-[300px] mx-auto bg-cover bg-center bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100"
-         /*   style={{
-                backgroundImage: `url(${chartBg})`,
-            }}*/
+            className="my-4 shadow-lg bg-white lg:rounded-lg p-5 w-full sm:w-[400px] lg:w-[600px] h-[250px] sm:h-[200px] lg:h-[300px] mx-auto bg-cover bg-center bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 sm:mb-36"
         >
-            <h3 className="text-lg font-semibold text-white">5-Day Temperature Forecast</h3>
-            <div className="w-[500px] h-[220px] ml-6 px-5 pt-5 rounded-xl">
+            <h3 className="lg:text-lg font-semibold text-white">5-Day Temperature Forecast</h3>
+            <div className="lg:w-[500px] sm:w-[300px] h-[220px] ml-6 px-5 pt-5 rounded-xl">
                 <Line data={data} options={options} />
             </div>
         </div>
