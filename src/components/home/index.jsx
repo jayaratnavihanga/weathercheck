@@ -9,7 +9,7 @@ import bg from '../../assets/bg.jpg'
 /*
 import {getBackgroundImage} from '../utils/getWeatherAssets';
 */
-import {countryCodes} from '../utils/countryCodes';
+import {countryCodes} from '../../utils/countryCodes';
 import WindyMap from "../WindyMap.jsx";
 import ForecastGraph from "../ForecastGraph.jsx";
 import {FaMapMarkerAlt} from "react-icons/fa";

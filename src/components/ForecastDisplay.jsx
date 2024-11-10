@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getWeatherIcon } from './utils/getWeatherAssets.js';
+import { getWeatherIcon } from '../utils/getWeatherAssets.js';
 
 const ForecastDisplay = ({ forecast, handleItemClick }) => (
     <div className="text-white">

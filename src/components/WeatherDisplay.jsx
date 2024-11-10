@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getWeatherIcon} from './utils/getWeatherAssets';
+import {getWeatherIcon} from '../utils/getWeatherAssets';
 import WeatherInfoCards from './WeatherInfoCards';
 
 const WeatherDisplay = ({weather = {}}) => {
