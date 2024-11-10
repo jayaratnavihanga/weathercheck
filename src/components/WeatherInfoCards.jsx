@@ -16,9 +16,9 @@ const WeatherInfoCards = ({ weather }) => {
     ];
 
     return (
-        <div className="grid grid-cols-3 gap-2 ">
+        <div className="grid grid-cols-3 gap-2 pt-1 pr-2">
             {cardData.map((card, index) => (
-                <div key={index} className="h-[72px] bg-white bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 text-black p-2 rounded shadow-sm text-center">
+                <div key={index} className="h-[70px] bg-white bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 text-black p-2 rounded-lg shadow-sm text-center">
                     <div className="flex items-center justify-center mb-1">
                         <span className="text-2xl text-yellow-300">{card.icon}</span>
                         {card.labelIcon && (
