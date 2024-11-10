@@ -8,7 +8,7 @@ const Header = () => {
     const { userLoggedIn } = useAuth()
 
     return (
-        <nav className="flex justify-between items-center w-full z-20 fixed top-0 left-0 h-16 px-8 bg-gradient-to-r from-indigo-600 to-blue-500 text-white shadow-md">
+        <nav className="flex justify-between items-center w-full z-20 fixed top-0 left-0 h-16 px-8 bg-gray-600 bg-clip-padding backdrop-filter  backdrop-blur bg-opacity-10 backdrop-saturate-200 backdrop-contrast-100text-white shadow-md">
             <div className="text-2xl font-bold">
                 <Link to="/" className="text-white hover:text-gray-200 transition duration-300">
                     WeatherCheck

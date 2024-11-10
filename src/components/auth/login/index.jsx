@@ -1,34 +1,38 @@
-import React, { useState } from 'react'
-import { Navigate, Link } from 'react-router-dom'
-import { doSignInWithEmailAndPassword, doSignInWithGoogle } from '../../../firebase/auth.js'
-import { useAuth } from '../../../contexts/authContext/index.jsx'
-import background from '../../../assets/weather-bg.jpg'
+import React, { useState } from 'react';
+import { Navigate, Link } from 'react-router-dom';
+import { doSignInWithEmailAndPassword, doSignInWithGoogle } from '../../../firebase/auth.js';
+import { useAuth } from '../../../contexts/authContext/index.jsx';
+import background from '../../../assets/bg.jpg';
 
 const Login = () => {
-    const { userLoggedIn } = useAuth()
+    const { userLoggedIn } = useAuth();
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [isSigningIn, setIsSigningIn] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isSigningIn, setIsSigningIn] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmit = async (e) => {
-        e.preventDefault()
-        if(!isSigningIn) {
-            setIsSigningIn(true)
-            await doSignInWithEmailAndPassword(email, password)
+        e.preventDefault();
+        if (!isSigningIn) {
+            setIsSigningIn(true);
+            await doSignInWithEmailAndPassword(email, password).catch(() => {
+                setErrorMessage("Failed to sign in. Please check your credentials.");
+                setIsSigningIn(false);
+            });
         }
-    }
+    };
 
     const onGoogleSignIn = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         if (!isSigningIn) {
-            setIsSigningIn(true)
-            doSignInWithGoogle().catch(err => {
-                setIsSigningIn(false)
-            })
+            setIsSigningIn(true);
+            doSignInWithGoogle().catch(() => {
+                setErrorMessage("Google Sign-In failed. Please try again.");
+                setIsSigningIn(false);
+            });
         }
-    }
+    };
 
     return (
         <div
@@ -40,63 +44,63 @@ const Login = () => {
             }}
             className="w-full h-screen flex items-center justify-center"
         >
-            {userLoggedIn && (<Navigate to={'/home'} replace={true} />)}
+            {userLoggedIn && <Navigate to={'/home'} replace={true} />}
 
-            <div className="w-full max-w-md p-8 space-y-6 bg-white bg-opacity-90 shadow-xl rounded-xl">
+            <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 bg-opacity-90 shadow-2xl rounded-xl">
                 <div className="text-center">
-                    <h1 className="text-3xl font-bold text-indigo-600">WeatherCheck</h1>
+                    <h1 className="text-3xl font-bold text-white">WeatherCheck</h1>
                 </div>
 
                 <form onSubmit={onSubmit} className="space-y-5">
                     <div>
-                        <label className="text-sm text-gray-600 font-bold">Email</label>
+                        <label className="text-sm text-gray-300 font-bold">Email</label>
                         <input
                             type="email"
                             autoComplete="email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full mt-2 px-3 py-2 text-gray-600 bg-gray-100 outline-none border focus:border-indigo-500 shadow-sm rounded-lg transition duration-300"
+                            className="w-full mt-2 px-3 py-2 text-white bg-gray-700 border border-gray-600 focus:border-blue-500 shadow-sm rounded-lg transition duration-300 outline-none"
                         />
                     </div>
 
                     <div>
-                        <label className="text-sm text-gray-600 font-bold">Password</label>
+                        <label className="text-sm text-gray-300 font-bold">Password</label>
                         <input
                             type="password"
                             autoComplete="current-password"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full mt-2 px-3 py-2 text-gray-600 bg-gray-100 outline-none border focus:border-indigo-500 shadow-sm rounded-lg transition duration-300"
+                            className="w-full mt-2 px-3 py-2 text-white bg-gray-700 border border-gray-600 focus:border-blue-500 shadow-sm rounded-lg transition duration-300 outline-none"
                         />
                     </div>
 
-                    {errorMessage && <span className="text-red-600 font-bold">{errorMessage}</span>}
+                    {errorMessage && <span className="text-red-500 font-bold">{errorMessage}</span>}
 
                     <button
                         type="submit"
                         disabled={isSigningIn}
-                        className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningIn ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg transition duration-300'}`}
+                        className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isSigningIn ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-lg'}`}
                     >
                         {isSigningIn ? 'Signing In...' : 'Sign In'}
                     </button>
                 </form>
 
-                <p className="text-center text-sm text-gray-600">
-                    Don&apos;t have an account? <Link to={'/register'} className="hover:underline font-bold text-indigo-600">Sign up</Link>
+                <p className="text-center text-sm text-gray-300">
+                    Don&apos;t have an account? <Link to={'/register'} className="hover:underline font-bold text-blue-500">Sign up</Link>
                 </p>
 
                 <div className="flex items-center text-center w-full">
-                    <div className="border-b-2 mb-2 mr-2 w-full"></div>
-                    <div className="text-sm font-bold text-gray-600 w-fit">OR</div>
-                    <div className="border-b-2 mb-2 ml-2 w-full"></div>
+                    <div className="border-b border-gray-500 mb-2 mr-2 w-full"></div>
+                    <div className="text-sm font-bold text-gray-400">OR</div>
+                    <div className="border-b border-gray-500 mb-2 ml-2 w-full"></div>
                 </div>
 
                 <button
                     disabled={isSigningIn}
                     onClick={onGoogleSignIn}
-                    className={`w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg text-sm font-medium text-gray-600 ${isSigningIn ? 'cursor-not-allowed' : 'hover:bg-gray-100 transition duration-300'}`}
+                    className={`w-full flex items-center justify-center gap-x-3 py-2.5 border border-gray-500 rounded-lg text-sm font-medium text-gray-300 ${isSigningIn ? 'cursor-not-allowed' : 'hover:bg-gray-600 transition duration-300'}`}
                 >
                     <svg className="w-5 h-5" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0)">
@@ -115,7 +119,7 @@ const Login = () => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

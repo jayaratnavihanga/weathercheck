@@ -10,10 +10,12 @@ export default {
         press: ['"Press Start 2P"', 'cursive'],
         roboto: ['"Roboto"', 'sans-serif'],
         sourGummy: ['"Sour Gummy"', 'sans-serif'],
+            lato: ['Lato', 'sans-serif'],
 
-      },},
+
+        },},
   },
-  plugins: [    require('daisyui'),
-  ],
+/*  plugins: [    require('daisyui'),
+  ],*/
 }
 

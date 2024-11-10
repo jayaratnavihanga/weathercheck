@@ -5,12 +5,14 @@ import WeatherDisplay from '../WeatherDisplay';
 import ForecastDisplay from '../ForecastDisplay';
 import ForecastDetailModal from '../ForecastDetailModal';
 import ErrorMessage from '../ErrorMessage';
+import bg from '../../assets/bg.jpg'
 /*
 import {getBackgroundImage} from '../utils/getWeatherAssets';
 */
 import {countryCodes} from '../utils/countryCodes';
 import WindyMap from "../WindyMap.jsx";
 import ForecastGraph from "../ForecastGraph.jsx";
+import {FaMapMarkerAlt} from "react-icons/fa";
 
 const WEATHER_API_BASE = "https://api.openweathermap.org/data/2.5/";
 const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
@@ -108,55 +110,61 @@ const Home = () => {
 
     return (
         <div
-            className="elative bg-white bg-cover bg-center h-full pt-8 text-black" /*${isNight ? "text-white" : "text-black"*/
-            /*
-                        style={{ backgroundImage: `url(${backgroundImage})` }}
-            */
+            className=" bg-cover bg-center h-screen "
+            style={{backgroundImage: `url(${bg})`}}
         >
             {/*
-            {isNight && <div className="absolute inset-0 bg-black opacity-80"></div>}
+            <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-3xl"></div>
 */}
 
-            <div className="relative z-10 p-5 overflow-y-auto h-full flex flex-col md:flex-row">
-                <div className="basis-1/2 pt-4 ">
+            {/*
+            <div
+                className=${isNight ? "text-white" : "text-black"}
+                            style={{ backgroundImage: `url(${backgroundImage})` }}
+            >
+            {isNight && <div className="absolute inset-0 bg-black opacity-80"></div>}
+            */}
+            <div className="pt-16 ">
 
-                    <div className="flex flex-col items-start h-full">
-                        {weather.name && weather.sys && weather.main && weather.weather && weather.weather[0] && (
-                            <div className="my-4 flex flex-col items-start">
-                                <p className="text-6xl">
-                                    {weather.name}, <span className="text-6xl">{countryName}</span>
-                                </p>
+                {weather.name && weather.sys && weather.main && weather.weather && weather.weather[0] && (
+                    <div>
+                        <div className="flex justify-between items-center p-4">
+                            <div className="pl-16">
+                                <SearchBar search={search} setSearch={setSearch} searchPressed={searchPressed}/>
+                                <ErrorMessage error={error}/>
 
-                                <div>
-                                    <div className="my-4">
-                                        <WeatherDisplay weather={weather}/>
-                                    </div>
 
-                                </div>
-
-                                <p className="text-xl">5 Day Forecast</p>
-
-                                <div className="mt-4 w-full max-h-[300px] overflow-y-auto">
-                                    <ForecastDisplay forecast={forecast} handleItemClick={handleItemClick}/>
-                                </div>
                             </div>
-                        )}
-                    </div>
-                </div>
-                <div className="basis-1/2">
-                    <div className="p-5 flex justify-end items-start">
-                        <SearchBar search={search} setSearch={setSearch} searchPressed={searchPressed}/>
-                    </div>
-                    <div className="p-8">
-                        <WindyMap lat={coordinates.lat} lon={coordinates.lon}/>
-                        <ForecastGraph forecast={forecast}/>
+                            <p className="text-6xl pr-10 flex items-center space-x-2">
+                                <FaMapMarkerAlt className="pt-2 text-4xl text-red-500"/>
+                                <div className="text-white">                         <span>
+        {weather.name}, <span>{countryName}</span>
+    </span></div>
+                            </p>
+
+                        </div>
 
                     </div>
-                    <ErrorMessage error={error}/>
+                )}
 
+                <div className="grid grid-cols-2 ">
+                    <div className="flex flex-col space-y-4 ml-14 ">
+                        <WeatherDisplay weather={weather}/>
+                        <ForecastDisplay forecast={forecast} handleItemClick={handleItemClick}/>
+
+                    </div>
+                    <div className="flex flex-col pt-3 ">
+                        <div className="pt-4">
+                            <WindyMap lat={coordinates.lat} lon={coordinates.lon}/>
+
+                            <ForecastGraph forecast={forecast}/>
+
+                        </div>
+                    </div>
                 </div>
+
+
             </div>
-
             {selectedItem && <ForecastDetailModal selectedItem={selectedItem} closeModal={closeModal}/>}
         </div>
     );
