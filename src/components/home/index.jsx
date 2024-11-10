@@ -110,7 +110,7 @@ const Home = () => {
 
     return (
         <div
-            className=" bg-cover bg-center h-screen "
+            className="bg-cover bg-center bg-no-repeat bg-fixed h-full"
             style={{backgroundImage: `url(${bg})`}}
         >
             {/*
@@ -128,14 +128,14 @@ const Home = () => {
 
                 {weather.name && weather.sys && weather.main && weather.weather && weather.weather[0] && (
                     <div>
-                        <div className="flex justify-between items-center p-4">
-                            <div className="pl-16">
+                        <div className="lg:flex justify-between items-center p-4">
+                            <div className="lg:pl-16">
                                 <SearchBar search={search} setSearch={setSearch} searchPressed={searchPressed}/>
                                 <ErrorMessage error={error}/>
 
 
                             </div>
-                            <p className="text-6xl pr-10 flex items-center space-x-2">
+                            <p className="lg:text-6xl sm:text-5xl pr-10 flex items-center space-x-2 ">
                                 <FaMapMarkerAlt className="pt-2 text-4xl text-red-500"/>
                                 <div className="text-white">                         <span>
         {weather.name}, <span>{countryName}</span>
@@ -147,19 +147,14 @@ const Home = () => {
                     </div>
                 )}
 
-                <div className="grid grid-cols-2 ">
-                    <div className="flex flex-col space-y-4 ml-14 ">
+                <div className="lg:grid grid-cols-2 lg:px-0 sm:px-4">
+                    <div className="lg:flex flex-col space-y-4 lg:ml-14">
                         <WeatherDisplay weather={weather}/>
                         <ForecastDisplay forecast={forecast} handleItemClick={handleItemClick}/>
-
                     </div>
-                    <div className="flex flex-col pt-3 ">
-                        <div className="pt-4">
-                            <WindyMap lat={coordinates.lat} lon={coordinates.lon}/>
-
-                            <ForecastGraph forecast={forecast}/>
-
-                        </div>
+                    <div className="lg:flex flex-col pt-7">
+                        <WindyMap lat={coordinates.lat} lon={coordinates.lon}/>
+                        <ForecastGraph forecast={forecast}/>
                     </div>
                 </div>
 
