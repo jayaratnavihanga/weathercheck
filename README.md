@@ -66,15 +66,16 @@ The project uses the following environment variables. Configure these in your `.
 
 ## Setup Instructions
 
-### 4. Enable Geolocation
-   To use geolocation functionality in the app, you need to allow the app to access your location. When prompted by the browser, grant permission for the app to use your location. This is required for weather updates based on your current location.
 
-### 5. Run the development server
+### 4. Run the development server
 Start the development server to view the app:
 
 ```bash
 npm run dev
 ```
+
+### 5. Enable Geolocation
+   To use geolocation functionality in the app, you need to allow the app to access your location. When prompted by the browser, grant permission for the app to use your location. This is required for weather updates based on your current location.
 
 ## Key Learning Points
 
